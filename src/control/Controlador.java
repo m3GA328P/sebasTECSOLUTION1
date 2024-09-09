@@ -1,9 +1,14 @@
 package control;
 
+import interfaces.DueñoInterface;
 import interfaces.DueñoListener;
+import interfaces.MascotaInterface;
 import interfaces.MascotaListener;
+import interfaces.ServicioInterface;
 import interfaces.ServicioListener;
+import interfaces.TablaUpdaterInterface;
 import interfaces.TablaUpdaterListener;
+import interfaces.VacunaInterface;
 import interfaces.VacunaListener;
 
 import java.awt.event.ActionEvent;
@@ -23,19 +28,19 @@ import vista.Vista;
 
 public class Controlador implements ActionListener, DueñoListener, MascotaListener, ServicioListener, VacunaListener, TablaUpdaterListener {
     private Vista vista;
-    private Dueño d;
-    private Mascota m;
-    private Servicio s;
-    private Vacuna v;
-    private TablaUpdater tablaUpdater;
+    private DueñoInterface d;
+    private MascotaInterface m;
+    private ServicioInterface s;
+    private VacunaInterface v;
+    private TablaUpdaterInterface tablaUpdater;
 
-    public Controlador(Vista vista) {
+    public Controlador(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
         this.vista = vista;
-        this.d = new Dueño();
-        this.m = new Mascota();
-        this.s = new Servicio();
-        this.v = new Vacuna();
-        this.tablaUpdater = new TablaUpdater();
+        this.d = d;
+        this.m = m;
+        this.s = s;
+        this.v = v;
+        this.tablaUpdater = tablaUpdater;
 
         actionListener(this);
 

@@ -1,10 +1,12 @@
 
 package modelo;
 
+import interfaces.VacunaInterface;
 import java.util.ArrayList;
+import javax.swing.JTable;
 
 
-public class Vacuna {
+public class Vacuna implements VacunaInterface {
     public String nombre;
     public Double valor;
     public Integer dosificacion;
@@ -53,5 +55,10 @@ public class Vacuna {
             }
      }
      return null;
+    }
+
+    @Override
+    public void actualizarTabla(JTable tabla, Object[] datos) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

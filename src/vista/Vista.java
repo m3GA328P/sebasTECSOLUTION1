@@ -290,6 +290,11 @@ public class Vista extends javax.swing.JFrame {
         });
 
         jButton3.setText("Registrar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Limpiar");
 
@@ -428,6 +433,11 @@ public class Vista extends javax.swing.JFrame {
         });
 
         jButton5.setText("Registrar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Buscar");
 
@@ -721,6 +731,14 @@ public class Vista extends javax.swing.JFrame {
         
         if((c<'a' || c>'z') &&(c<'A' || c>'Z') && (c<'0' || c>'9')) evt.consume();
     }//GEN-LAST:event_jTextField9KeyTyped
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
     
     /**
      * @param args the command line arguments

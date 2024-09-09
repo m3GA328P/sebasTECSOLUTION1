@@ -1,24 +1,26 @@
-
 package modelo;
 
+import interfaces.ServicioInterface;
 import java.util.ArrayList;
 
+public class Servicio implements ServicioInterface {
+    private String codigo;
+    private String nombre;
+    private String responsable;
+    private Double tarifa;
+    private static ArrayList<Servicio> servicios = new ArrayList<>();
 
-public class Servicio {
-    public String codigo;
-    public String nombre;
-    public String responsable;
-    public Double tarifa;
-    ArrayList<Servicio> servicios= new ArrayList<>();
     public Servicio() {
     }
 
-    public Servicio(String codigo,String nombre, String responsable, Double tarifa) {
+    public Servicio(String codigo, String nombre, String responsable, Double tarifa) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.responsable = responsable;
         this.tarifa = tarifa;
     }
+
+    // Getters y setters
 
     public String getCodigo() {
         return codigo;
@@ -26,14 +28,6 @@ public class Servicio {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
-    }
-
-    public ArrayList<Servicio> getServicios() {
-        return servicios;
-    }
-
-    public void setServicios(ArrayList<Servicio> servicios) {
-        this.servicios = servicios;
     }
 
     public String getNombre() {
@@ -59,19 +53,28 @@ public class Servicio {
     public void setTarifa(Double tarifa) {
         this.tarifa = tarifa;
     }
-    
-     public void registrarServicio(String cedula,String nombre, String responsable, Double tarifa){
-        servicios.add(new Servicio(cedula,nombre,responsable,tarifa));
+
+    public static ArrayList<Servicio> getServicios() {
+        return servicios;
     }
-    
-    public String buscarServicio(String cedula){
 
-     for(int i=0; i<servicios.size();i++){
-            if(cedula.equals(servicios.get(i).getCodigo())){
-                return servicios.get(i).getCodigo();
+    public static void setServicios(ArrayList<Servicio> servicios) {
+        Servicio.servicios = servicios;
+    }
+
+    // Métodos implementados de la interfaz ServicioInterface
+
+    @Override
+    public void registrarServicio(String cedulaMascota, String descripcion, String fecha, double costo) {
+        servicios.add(new Servicio(cedulaMascota, descripcion, fecha, costo));
+    }
+
+    public String buscarServicio(String cedula) {
+        for (Servicio servicio : servicios) {
+            if (cedula.equals(servicio.getCodigo())) {
+                return servicio.getCodigo();
             }
-     }
-
-     return null;
+        }
+        return null;
     }
 }

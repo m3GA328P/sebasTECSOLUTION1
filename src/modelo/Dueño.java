@@ -1,15 +1,15 @@
 
 package modelo;
+import interfaces.DueñoInterface;
 import java.util.ArrayList;
-public class Dueño {
+public class Dueño implements DueñoInterface {
     public String cedula;
     public String nombre;
     public String direccion;
     public String telefono;
     public String genero;
 ArrayList<Dueño> dueños= new ArrayList<>();
-    public Dueño() {
-    }
+    public Dueño() {}
     public Dueño(String cedula, String nombre, String direccion, String telefono, String genero) {
         this.cedula = cedula;
         this.nombre = nombre;
