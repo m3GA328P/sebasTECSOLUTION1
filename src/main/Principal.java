@@ -16,7 +16,6 @@ import vista.Vista;
 
 public class Principal {
     public static void main(String[] args) {
-        Principal p = new Principal();
         Vista v = new Vista();
         DueñoInterface d = new Dueño();  
         MascotaInterface m = new Mascota();
@@ -24,6 +23,7 @@ public class Principal {
         VacunaInterface vi = new Vacuna(); 
         TablaUpdaterInterface tablaUpdater = new TablaUpdater(); 
 
-        Controlador c = new Controlador((Vista) v, d, m, s, vi, tablaUpdater);
+        // Obtener la instancia única del controlador
+        Controlador c = Controlador.getInstancia(v, d, m, s, vi, tablaUpdater);
     }
 }

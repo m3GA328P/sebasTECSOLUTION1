@@ -1,18 +1,15 @@
-
 package modelo;
-
 import interfaces.VacunaInterface;
 import java.util.ArrayList;
 import javax.swing.JTable;
 
+public class Vacuna implements VacunaInterface, Cloneable {
+    private String nombre;
+    private Double valor;
+    private Integer dosificacion;
+    private ArrayList<Vacuna> vacunas = new ArrayList<>();
 
-public class Vacuna implements VacunaInterface {
-    public String nombre;
-    public Double valor;
-    public Integer dosificacion;
-    ArrayList<Vacuna> vacunas = new ArrayList<>();
-    public Vacuna() {
-    }
+    public Vacuna() {}
 
     public Vacuna(String nombre, Double valor, Integer dosificacion) {
         this.nombre = nombre;
@@ -43,18 +40,27 @@ public class Vacuna implements VacunaInterface {
     public void setDosificacion(Integer dosificacion) {
         this.dosificacion = dosificacion;
     }
-     public void registrarVacuna(String nombre, Double valor, Integer dosificacion){
-        vacunas.add(new Vacuna(nombre,valor,dosificacion));
+     @Override
+    public Vacuna clone() {
+        try {
+            return (Vacuna) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    
-    public String buscarVacuna(String nombre){
 
-     for(int i=0; i<vacunas.size();i++){
-            if(nombre.equals(vacunas.get(i).getNombre())){
-                return vacunas.get(i).getNombre();
+    public void registrarVacuna(String nombre, Double valor, Integer dosificacion) {
+        vacunas.add(new Vacuna(nombre, valor, dosificacion));
+    }
+
+    public String buscarVacuna(String nombre) {
+        for (Vacuna vacuna : vacunas) {
+            if (nombre.equals(vacuna.getNombre())) {
+                return vacuna.getNombre();
             }
-     }
-     return null;
+        }
+        return null;
     }
 
     @Override

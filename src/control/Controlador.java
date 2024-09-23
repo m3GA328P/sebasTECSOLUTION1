@@ -34,7 +34,11 @@ public class Controlador implements ActionListener, DueñoListener, MascotaListe
     private VacunaInterface v;
     private TablaUpdaterInterface tablaUpdater;
 
-    public Controlador(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
+
+    private static Controlador instancia;
+
+
+    private Controlador(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
         this.vista = vista;
         this.d = d;
         this.m = m;
@@ -59,6 +63,15 @@ public class Controlador implements ActionListener, DueñoListener, MascotaListe
         vista.jTextField13.setEditable(false);
     }
 
+
+    public static Controlador getInstancia(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
+        if (instancia == null) {
+            instancia = new Controlador(vista, d, m, s, v, tablaUpdater);
+        }
+        return instancia;
+    }
+
+  
     private void actionListener(ActionListener Controlador) {
         vista.jButton1.addActionListener(Controlador);
         vista.jButton2.addActionListener(Controlador);

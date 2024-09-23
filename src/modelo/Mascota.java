@@ -1,10 +1,9 @@
 package modelo;
-
 import interfaces.MascotaInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mascota implements MascotaInterface {
+public class Mascota implements MascotaInterface, Cloneable {
     private String nombre;
     private String fechaNacimiento;
     private String cedula;
@@ -13,8 +12,7 @@ public class Mascota implements MascotaInterface {
     private String ultimaVacuna;
     private static List<Mascota> mascotas = new ArrayList<>();
 
-    public Mascota() {
-    }
+    public Mascota() {}
 
     public Mascota(String nombre, String fechaNacimiento, String cedula, String raza, Double peso, String ultimaVacuna) {
         this.nombre = nombre;
@@ -23,6 +21,16 @@ public class Mascota implements MascotaInterface {
         this.raza = raza;
         this.peso = peso;
         this.ultimaVacuna = ultimaVacuna;
+    }
+
+      @Override
+    public Mascota clone() {
+        try {
+            return (Mascota) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

@@ -1,17 +1,15 @@
 package modelo;
-
 import interfaces.ServicioInterface;
 import java.util.ArrayList;
 
-public class Servicio implements ServicioInterface {
+public class Servicio implements ServicioInterface, Cloneable {
     private String codigo;
     private String nombre;
     private String responsable;
     private Double tarifa;
     private static ArrayList<Servicio> servicios = new ArrayList<>();
 
-    public Servicio() {
-    }
+    public Servicio() {}
 
     public Servicio(String codigo, String nombre, String responsable, Double tarifa) {
         this.codigo = codigo;
@@ -63,6 +61,16 @@ public class Servicio implements ServicioInterface {
     }
 
     // Métodos implementados de la interfaz ServicioInterface
+
+      @Override
+    public Servicio clone() {
+        try {
+            return (Servicio) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public void registrarServicio(String cedulaMascota, String descripcion, String fecha, double costo) {
