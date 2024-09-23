@@ -23,7 +23,7 @@ public class Principal {
         VacunaInterface vi = new Vacuna(); 
         TablaUpdaterInterface tablaUpdater = new TablaUpdater(); 
 
-        // Obtener la instancia única del controlador
+
         Controlador c = Controlador.getInstancia(v, d, m, s, vi, tablaUpdater);
     }
 }
