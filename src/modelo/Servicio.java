@@ -1,4 +1,5 @@
 package modelo;
+
 import interfaces.ServicioInterface;
 import java.util.ArrayList;
 
@@ -9,60 +10,80 @@ public class Servicio implements ServicioInterface, Cloneable {
     private Double tarifa;
     private static ArrayList<Servicio> servicios = new ArrayList<>();
 
-    public Servicio() {}
 
-    public Servicio(String codigo, String nombre, String responsable, Double tarifa) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.responsable = responsable;
-        this.tarifa = tarifa;
+    private Servicio(ServicioBuilder builder) {
+        this.codigo = builder.codigo;
+        this.nombre = builder.nombre;
+        this.responsable = builder.responsable;
+        this.tarifa = builder.tarifa;
     }
 
-    // Getters y setters
-
+ 
     public String getCodigo() {
         return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getResponsable() {
         return responsable;
-    }
-
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
     }
 
     public Double getTarifa() {
         return tarifa;
     }
 
-    public void setTarifa(Double tarifa) {
-        this.tarifa = tarifa;
+   
+    public void registrarServicio(String codigo, String nombre, String responsable, double tarifa) {
+        servicios.add(new ServicioBuilder().setCodigo(codigo).setNombre(nombre)
+                                           .setResponsable(responsable).setTarifa(tarifa).build());
     }
 
-    public static ArrayList<Servicio> getServicios() {
-        return servicios;
+   
+    public Servicio buscarServicio(String codigo) {
+        for (Servicio servicio : servicios) {
+            if (codigo.equals(servicio.getCodigo())) {
+                return servicio;
+            }
+        }
+        return null;
     }
 
-    public static void setServicios(ArrayList<Servicio> servicios) {
-        Servicio.servicios = servicios;
+  
+    public static class ServicioBuilder {
+        private String codigo;
+        private String nombre;
+        private String responsable;
+        private Double tarifa;
+
+        public ServicioBuilder setCodigo(String codigo) {
+            this.codigo = codigo;
+            return this;
+        }
+
+        public ServicioBuilder setNombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public ServicioBuilder setResponsable(String responsable) {
+            this.responsable = responsable;
+            return this;
+        }
+
+        public ServicioBuilder setTarifa(Double tarifa) {
+            this.tarifa = tarifa;
+            return this;
+        }
+
+        public Servicio build() {
+            return new Servicio(this);
+        }
     }
 
-    // Métodos implementados de la interfaz ServicioInterface
-
-      @Override
+    @Override
     public Servicio clone() {
         try {
             return (Servicio) super.clone();
@@ -70,19 +91,5 @@ public class Servicio implements ServicioInterface, Cloneable {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public void registrarServicio(String cedulaMascota, String descripcion, String fecha, double costo) {
-        servicios.add(new Servicio(cedulaMascota, descripcion, fecha, costo));
-    }
-
-    public String buscarServicio(String cedula) {
-        for (Servicio servicio : servicios) {
-            if (cedula.equals(servicio.getCodigo())) {
-                return servicio.getCodigo();
-            }
-        }
-        return null;
     }
 }

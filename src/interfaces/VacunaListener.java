@@ -1,7 +1,7 @@
-package interfaces;
+    package interfaces;
 
-import java.awt.event.ActionEvent;
+    import java.awt.event.ActionEvent;
 
-public interface VacunaListener {
-    void registrarVacuna(ActionEvent e);
-}
+    public interface VacunaListener {
+        void registrarVacuna(ActionEvent e);
+    }

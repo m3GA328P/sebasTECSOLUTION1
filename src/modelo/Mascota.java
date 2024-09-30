@@ -1,4 +1,5 @@
 package modelo;
+
 import interfaces.MascotaInterface;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +13,58 @@ public class Mascota implements MascotaInterface, Cloneable {
     private String ultimaVacuna;
     private static List<Mascota> mascotas = new ArrayList<>();
 
-    public Mascota() {}
+  
+    private Mascota(MascotaBuilder builder) {
+        this.nombre = builder.nombre;
+        this.fechaNacimiento = builder.fechaNacimiento;
+        this.cedula = builder.cedula;
+        this.raza = builder.raza;
+        this.peso = builder.peso;
+        this.ultimaVacuna = builder.ultimaVacuna;
+    }
 
-    public Mascota(String nombre, String fechaNacimiento, String cedula, String raza, Double peso, String ultimaVacuna) {
-        this.nombre = nombre;
-        this.fechaNacimiento = fechaNacimiento;
-        this.cedula = cedula;
-        this.raza = raza;
-        this.peso = peso;
-        this.ultimaVacuna = ultimaVacuna;
+
+    public static class MascotaBuilder {
+        private String nombre;
+        private String fechaNacimiento;
+        private String cedula;
+        private String raza;
+        private Double peso;
+        private String ultimaVacuna;
+
+        public MascotaBuilder setNombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public MascotaBuilder setFechaNacimiento(String fechaNacimiento) {
+            this.fechaNacimiento = fechaNacimiento;
+            return this;
+        }
+
+        public MascotaBuilder setCedula(String cedula) {
+            this.cedula = cedula;
+            return this;
+        }
+
+        public MascotaBuilder setRaza(String raza) {
+            this.raza = raza;
+            return this;
+        }
+
+        public MascotaBuilder setPeso(Double peso) {
+            this.peso = peso;
+            return this;
+        }
+
+        public MascotaBuilder setUltimaVacuna(String ultimaVacuna) {
+            this.ultimaVacuna = ultimaVacuna;
+            return this;
+        }
+
+        public Mascota build() {
+            return new Mascota(this);
+        }
     }
 
       @Override
@@ -33,9 +77,10 @@ public class Mascota implements MascotaInterface, Cloneable {
         }
     }
 
-    @Override
-    public void registrarMascota(String nombre, String fechaNacimiento, String cedulaDueño, String raza, double peso, String ultimaVacuna) {
-        mascotas.add(new Mascota(nombre, fechaNacimiento, cedulaDueño, raza, peso, ultimaVacuna));
+ 
+    public void registrarMascota(String nombre, String fechaNacimiento, String cedula, String raza, double peso, String ultimaVacuna) {
+        mascotas.add(new MascotaBuilder().setNombre(nombre).setFechaNacimiento(fechaNacimiento).setCedula(cedula)
+                                         .setRaza(raza).setPeso(peso).setUltimaVacuna(ultimaVacuna).build());
     }
 
     @Override
@@ -48,7 +93,7 @@ public class Mascota implements MascotaInterface, Cloneable {
         return null;
     }
 
-    // Getters y setters
+
 
     public String getNombre() {
         return nombre;
