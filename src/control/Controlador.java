@@ -1,9 +1,12 @@
 package control;
 
+import adapters.DueñoAdaptadorConcreto;
+import facade.VeterinariaFacade;
 import interfaces.DueñoInterface;
 import interfaces.DueñoListener;
 import interfaces.MascotaInterface;
 import interfaces.MascotaListener;
+import interfaces.ServicioComponent;
 import interfaces.ServicioInterface;
 import interfaces.ServicioListener;
 import interfaces.TablaUpdaterInterface;
@@ -23,47 +26,48 @@ import javax.swing.JTable;
 import modelo.Dueño;
 import modelo.Mascota;
 import modelo.Servicio;
+import modelo.ServicioLeaf;
 import modelo.Vacuna;
 import vista.Vista;
 
 public class Controlador implements ActionListener, DueñoListener, MascotaListener, ServicioListener, VacunaListener, TablaUpdaterListener {
     private Vista vista;
+    private VeterinariaFacade facade;
     private DueñoInterface d;
     private MascotaInterface m;
     private ServicioInterface s;
     private VacunaInterface v;
     private TablaUpdaterInterface tablaUpdater;
+    private SimpleDateFormat formatoDeFecha;
 
+private Controlador(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
+    this.vista = vista;
+    this.facade = new VeterinariaFacade();
+    this.d = d; 
+    this.m = m; 
+    this.s = s; 
+    this.v = v; 
+    this.tablaUpdater = tablaUpdater; 
 
-    private static Controlador instancia;
+    this.formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
 
+    actionListener(this);
 
-    private Controlador(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
-        this.vista = vista;
-        this.d = d;
-        this.m = m;
-        this.s = s;
-        this.v = v;
-        this.tablaUpdater = tablaUpdater;
-
-        actionListener(this);
-
-        try {
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-            vista.jDateChooser1.setDate(formato.parse("01/01/2010"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        vista.jTable1.setEnabled(false);
-        vista.jTable1.setVisible(false);
-        vista.jButton5.setEnabled(false);
-        vista.jTextField12.setEditable(false);
-        vista.jTextField11.setEditable(false);
-        vista.jTextField13.setEditable(false);
+    try {
+        vista.jDateChooser1.setDate(formatoDeFecha.parse("01/01/2010"));
+    } catch (ParseException e) {
+        e.printStackTrace();
     }
 
+    vista.jTable1.setEnabled(false);
+    vista.jTable1.setVisible(false);
+    vista.jButton5.setEnabled(false);
+    vista.jTextField12.setEditable(false);
+    vista.jTextField11.setEditable(false);
+    vista.jTextField13.setEditable(false);
+}
 
+private static Controlador instancia;
     public static Controlador getInstancia(Vista vista, DueñoInterface d, MascotaInterface m, ServicioInterface s, VacunaInterface v, TablaUpdaterInterface tablaUpdater) {
         if (instancia == null) {
             instancia = new Controlador(vista, d, m, s, v, tablaUpdater);
@@ -115,19 +119,16 @@ public class Controlador implements ActionListener, DueñoListener, MascotaListe
     @Override
     public void registrarDueño(ActionEvent e) {
         if (validarCamposDueño()) {
-            int seleccionado = vista.jComboBox1.getSelectedIndex();
-            d.registrarDueño(vista.jTextField1.getText(), vista.jTextField2.getText(), vista.jTextField5.getText(), vista.jTextField4.getText(), vista.jComboBox1.getItemAt(seleccionado));
+            facade.registrarDueño(vista.jTextField1.getText(), vista.jTextField2.getText(), vista.jTextField5.getText(), vista.jTextField4.getText(), vista.jComboBox1.getItemAt(vista.jComboBox1.getSelectedIndex()));
             JOptionPane.showMessageDialog(null, "Cliente/Dueño Registrado Exitosamente");
-
-            Object[] fila = {
+            actualizarTabla(vista.jTable2, new Object[]{
                 vista.jTextField1.getText(),
                 vista.jTextField2.getText(),
                 vista.jTextField5.getText(),
                 vista.jTextField4.getText(),
-                vista.jComboBox1.getItemAt(seleccionado)
-            };
-
-            actualizarTabla(vista.jTable2, fila);
+                vista.jComboBox1.getItemAt(vista.jComboBox1.getSelectedIndex())
+            });
+  
         }
     }
 
@@ -142,11 +143,9 @@ public class Controlador implements ActionListener, DueñoListener, MascotaListe
 
     @Override
     public void registrarMascota(ActionEvent e) {
-        if (validarCamposMascota() && d.buscarDueño(vista.jTextField7.getText()) != null) {
-            Calendar calendario = GregorianCalendar.getInstance();
-            java.util.Date fecha = calendario.getTime();
-            SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
-
+        if (validarCamposMascota() && facade.buscarDueño(vista.jTextField7.getText()) != null) {
+            facade.registrarMascota(vista.jTextField3.getText(), formatoDeFecha.format(vista.jDateChooser1.getDate()), vista.jTextField7.getText(), vista.jTextField8.getText(), Double.parseDouble(vista.jTextField10.getText()), vista.jTextField9.getText());
+            
             m.registrarMascota(vista.jTextField3.getText(), formatoDeFecha.format(vista.jDateChooser1.getDate()), vista.jTextField7.getText(), vista.jTextField8.getText(), Double.parseDouble(vista.jTextField10.getText()), vista.jTextField9.getText());
             JOptionPane.showMessageDialog(null, "Mascota Registrada Exitosamente");
 
@@ -176,38 +175,44 @@ public class Controlador implements ActionListener, DueñoListener, MascotaListe
             vista.jDateChooser1.setDate(new Date("01/01/2010"));
         }
 
+   @Override
+public void registrarServicio(ActionEvent e) {
+    if (vista.jTable1.getSelectedRow() == -1) {
+        JOptionPane.showMessageDialog(null, "Seleccione 1 Tratamiento de la Tabla");
+    } else {
+        ServicioComponent servicio;
+  
+        servicio = new ServicioLeaf(vista.jTextField12.getText(), Double.parseDouble(vista.jTextField13.getText()));
+
+        facade.registrarServicio(vista.jTextField6.getText(), servicio.getDescripcion(), vista.jTextField11.getText(), servicio.getCosto());
+        
+        JOptionPane.showMessageDialog(null, "Servicio Registrado Exitosamente");
+
+        Object[] fila = {
+            vista.jTextField6.getText(),
+            servicio.getDescripcion(),
+            vista.jTextField11.getText(),
+            servicio.getCosto()
+        };
+
+        actualizarTabla(vista.jTable4, fila);
+        
+        vista.jButton5.setEnabled(false);
+        vista.jTable1.setEnabled(false);
+        vista.jTable1.setVisible(false);
+        vista.jButton7.setEnabled(true);
+        vista.jTextField12.setText("");
+        vista.jTextField11.setText("");
+        vista.jTextField13.setText("");
+        vista.jTextField6.setText("");
+    }
+}
+
+
         @Override
-        public void registrarServicio(ActionEvent e) {
-            if (vista.jTable1.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(null, "Seleccione 1 Tratamiento de la Tabla");
-            } else {
-                s.registrarServicio(vista.jTextField6.getText(), vista.jTextField12.getText(), vista.jTextField11.getText(), Double.parseDouble(vista.jTextField13.getText()));
-                JOptionPane.showMessageDialog(null, "Servicio Registrado Exitosamente");
-
-                Object[] fila = {
-                    vista.jTextField6.getText(),
-                    vista.jTextField12.getText(),
-                    vista.jTextField11.getText(),
-                    vista.jTextField13.getText()
-                };
-
-                actualizarTabla(vista.jTable4, fila);
-
-                vista.jButton5.setEnabled(false);
-                vista.jTable1.setEnabled(false);
-                vista.jTable1.setVisible(false);
-                vista.jButton7.setEnabled(true);
-                vista.jTextField12.setText("");
-                vista.jTextField11.setText("");
-                vista.jTextField13.setText("");
-                vista.jTextField6.setText("");
-            }
-        }
-
-        @Override
-        public void actualizarTabla(JTable tabla, Object[] datos) {
-            tablaUpdater.actualizarTabla(tabla, datos);
-        }
+    public void actualizarTabla(JTable tabla, Object[] datos) {
+        facade.actualizarTabla(tabla, datos);
+    }
         
         private boolean validarCamposDueño() {
             if (vista.jTextField1.getText().length() == 0) {

@@ -1,5 +1,7 @@
 package main;
 
+import adapters.DueñoAdaptador;
+import adapters.DueñoAdaptadorConcreto;
 import control.Controlador;
 import factories.AbstractFactory;
 import factories.FactoryConcreta;
@@ -13,15 +15,16 @@ import vista.Vista;
 public class Principal {
     public static void main(String[] args) {
         Vista v = new Vista();
-        
 
         AbstractFactory factory = new FactoryConcreta();
-
-        DueñoInterface d = factory.crearDueño();  
         MascotaInterface m = factory.crearMascota();
-        ServicioInterface s = factory.crearServicio(); 
-        VacunaInterface vi = factory.crearVacuna(); 
+        ServicioInterface s = factory.crearServicio();
+        VacunaInterface vi = factory.crearVacuna();
         TablaUpdaterInterface tablaUpdater = factory.crearTablaUpdater();
+
+ 
+        DueñoAdaptador dueñoAdaptador = new DueñoAdaptadorConcreto();
+        DueñoInterface d = dueñoAdaptador.obtenerDueñoDesdeFuenteExterna("12345678");
 
         Controlador c = Controlador.getInstancia(v, d, m, s, vi, tablaUpdater);
     }
